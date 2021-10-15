@@ -1,12 +1,20 @@
 <template>
   <div>
-    <v-btn class="my-3" @click="prev" :disabled="!pagination.prev">Prev</v-btn>
-    <v-btn class="float-right my-3" @click="next" :disabled="!pagination.next">Next</v-btn>
+    <div class="text-center">
+      <v-pagination
+        v-model="page"
+        :length="pagination.pages"
+        :total-visible="7"
+        @previous="prev"
+        @next="next"
+        @input="getPage"
+      ></v-pagination>
+    </div>
     <v-row>
       <v-col :cols="3" v-for="result in results" :key="'result-' + result.id">
         <v-card elevation="2">
           <v-img :src="result.image"></v-img>
-          <v-card-title>{{result.name}}</v-card-title>
+          <v-card-title><router-link :to="'/character/' + result.id">{{result.name}}</router-link></v-card-title>
           <v-card-text>
             <ul>
               <li><b>Status:</b>{{result.status}}</li>
@@ -23,13 +31,14 @@
 <script>
 export default {
   created(){
-    this.$axios.get('https://rickandmortyapi.com/api/character').then(response => {
-      this.results = response.data.results;
-      this.pagination = response.data.info;
-    });
+    if(this.$route.query.page){
+      this.page = parseInt(this.$route.query.page);
+    }
+    this.getPageData(this.page);
   },
   data(){
     return {
+      page: 1,
       results: [],
       pagination: {
         count: 0,
@@ -39,15 +48,33 @@ export default {
       }
     }
   },
+  beforeRouteUpdate(to, from, next) {
+    // react to route changes...
+    // don't forget to call next()
+    this.page = 1;
+    if(to.query.page){
+      this.page = parseInt(to.query.page); 
+    }
+    this.getPageData(this.page);
+    next();
+  },
   methods: {
     next(){
-      this.$axios.get(this.pagination.next).then(response => {
-        this.results = response.data.results;
-        this.pagination = response.data.info;
-      });
+      this.getPage(this.page+1);
     },
     prev(){
-      this.$axios.get(this.pagination.prev).then(response => {
+      this.getPage(this.page-1);
+    },
+    getPage(page){
+      this.$router.push('/?page=' + page);
+      this.getPageData(page);
+    },
+    getPageData(page){
+      this.$axios.get('https://rickandmortyapi.com/api/character', {
+        params: {
+          page: page
+        }
+      }).then(response => {
         this.results = response.data.results;
         this.pagination = response.data.info;
       });
