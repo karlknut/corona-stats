@@ -1,12 +1,16 @@
 <template>
   <div>
-    <v-text-field
-            v-model="search"
-            dense
-            filled
-            label="Search"
-          ></v-text-field>
-           <v-select
+    <v-row>
+      <v-col cols="9">
+        <v-text-field
+                v-model="search"
+                dense
+                filled
+                label="Search"
+              ></v-text-field>
+      </v-col>
+      <v-col cols="3">
+        <v-select
           :items="$store.state.sortingCategories"
           item-text="name"
           filled
@@ -14,10 +18,12 @@
           v-model="sort"
           return-object
         ></v-select>
+      </v-col>  
+    </v-row>
     <v-row>
       <v-col :cols="3" v-for="country in $store.getters.sortedCountries" :key="'result-' + country.ID">
         <v-card elevation="2">
-          <v-card-title>{{country.Country}}</v-card-title>
+          <v-card-title><nuxt-link :to="'/country/' + country.Slug">{{country.Country}}</nuxt-link></v-card-title>
           <v-card-text>
             <ul>
               <li><b>New Confirmed:</b>{{country.NewConfirmed}}</li>

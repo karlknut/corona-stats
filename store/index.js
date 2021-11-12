@@ -1,5 +1,6 @@
 export const state = () => ({
     countries: [],
+    country:[],
     search: '',
     sortingCategories: [
         {name: 'Total Confirmed Asc', field: 'TotalConfirmed', order: 'asc'},
@@ -23,6 +24,9 @@ export const mutations = {
     },
     SET_SORT(state, sort) {
         state.sort = sort;
+    },
+    SET_COUNTRY(state, country){
+        state.country = country;
     }
 }
 
@@ -30,6 +34,11 @@ export const actions = {
     getSummary(context) {
         this.$axios.get('https://api.covid19api.com/summary').then(response => {
             context.commit('SET_COUNTRIES', response.data.Countries);
+        });
+    },
+    getCountry(context, slug){
+        this.$axios.get('https://api.covid19api.com/country/' + slug).then(response => {
+            context.commit('SET_COUNTRY', response.data);
         });
     }
 }
