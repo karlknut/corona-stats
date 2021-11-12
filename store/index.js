@@ -1,41 +1,32 @@
 export const state = () => ({
-    page: 1,
-    results: [],
-    pagination: {
-      count: 0,
-      next: null,
-      pages: 0,
-      prev: null,
-    },
-    isLoading: false
+    countries: [],
+    search: ''
 })
   
 export const mutations = {
-    SET_RESULTS(state, results) {
-        state.results = results;
+    SET_COUNTRIES(state, countries) {
+        state.countries = countries;
     },
-    SET_PAGINATION(state, pagination){
-        state.pagination = pagination;
-    },
-    TOGGLE_IS_LOADING(state){
-        state.isLoading = !state.isLoading;
-    },
-    SET_PAGE(state, page){
-        state.page = page;
+    SET_SEARCH(state, search) {
+        state.search = search;
     }
 }
 
 export const actions = {
-    getPage(context, page) {
-        context.commit('TOGGLE_IS_LOADING');
-        this.$axios.get('https://rickandmortyapi.com/api/character', {
-            params: {
-                page: page
-            }
-        }).then(response => {
-            context.commit('SET_RESULTS', response.data.results);
-            context.commit('SET_PAGINATION', response.data.info);
-            context.commit('TOGGLE_IS_LOADING');
+    getSummary(context) {
+        this.$axios.get('https://api.covid19api.com/summary').then(response => {
+            context.commit('SET_COUNTRIES', response.data.Countries);
+        });
+    }
+}
+
+export const getters = {
+    countryNames(state){
+        return state.countries.map(country => country.Country);
+    },
+    filteredCountries(state){
+        return state.countries.filter(country => {
+            return state.search.toLowerCase() === country.Country.substr(0, state.search.length).toLowerCase()
         });
     }
 }

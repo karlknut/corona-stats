@@ -1,25 +1,23 @@
 <template>
   <div>
-    <div class="text-center">
-      <v-pagination
-        v-model="page"
-        :length="$store.state.pagination.pages"
-        :total-visible="7"
-        @previous="prev"
-        @next="next"
-        @input="getPage"
-      ></v-pagination>
-    </div>
+    <v-text-field
+            v-model="search"
+            dense
+            filled
+            label="Search"
+          ></v-text-field>
     <v-row>
-      <v-col :cols="3" v-for="result in $store.state.results" :key="'result-' + result.id">
+      <v-col :cols="3" v-for="country in $store.getters.filteredCountries" :key="'result-' + country.ID">
         <v-card elevation="2">
-          <v-img :src="result.image"></v-img>
-          <v-card-title><router-link :to="'/character/' + result.id">{{result.name}}</router-link></v-card-title>
+          <v-card-title>{{country.Country}}</v-card-title>
           <v-card-text>
             <ul>
-              <li><b>Status:</b>{{result.status}}</li>
-              <li><b>Gender:</b>{{result.gender}}</li>
-              <li><b>Species:</b>{{result.species}}</li>
+              <li><b>New Confirmed:</b>{{country.NewConfirmed}}</li>
+              <li><b>Total Confirmed:</b>{{country.TotalConfirmed}}</li>
+              <li><b>New Deaths:</b>{{country.NewDeaths}}</li>
+              <li><b>Total Deaths:</b>{{country.TotalDeaths}}</li>
+              <li><b>New Recovered:</b>{{country.NewRecovered}}</li>
+              <li><b>Total Recovered:</b>{{country.TotalRecovered}}</li>          
             </ul>
           </v-card-text>
         </v-card>
@@ -31,40 +29,18 @@
 <script>
 export default {
   created(){
-    if(this.$route.query.page){
-      this.$store.commit('SET_PAGE', parseInt(this.$route.query.page)); 
-    }
-    this.$store.dispatch('getPage', this.$store.state.page);
-  },
-  beforeRouteUpdate(to, from, next) {
-    // react to route changes...
-    // don't forget to call next()
-    let page = 1;
-    if(to.query.page){
-      page = parseInt(to.query.page); 
-    }
-    this.$store.commit('SET_PAGE', page);
-    next();
+    this.$store.dispatch('getSummary');
   },
   methods: {
-    next(){
-      this.getPage(this.page+1);
-    },
-    prev(){
-      this.getPage(this.page-1);
-    },
-    getPage(page){
-      this.$router.push('/?page=' + page);
-      this.$store.dispatch('getPage', page);
-    }
+    
   },
   computed: {
-    page:{
-      set(value){
-        this.$store.commit('SET_PAGE', value);
-      },
+    search: {
       get(){
-        return this.$store.state.page;
+        return this.$store.state.search;
+      },
+      set(value){
+        this.$store.commit('SET_SEARCH', value);
       }
     }
   }
