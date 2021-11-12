@@ -1,29 +1,25 @@
 <template>
-  <div id="map"></div>
+<div>
+    <v-btn @click="center={lat: 45, lng:25}; zoom=10">go to somewhere</v-btn>
+  <google-map :center="center" :zoom="zoom"></google-map>
+</div>
 </template>
 
 <script>
-import { Loader } from "@googlemaps/js-api-loader"
-export default {
-    mounted(){
-      
-        const loader = new Loader({
-            apiKey: this.$config.googleApiKey,
-            version: "weekly"
-        });
+import GoogleMap from '~/components/GoogleMap.vue'
 
-        loader.load().then(() => {
-            let map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: -34.397, lng: 150.644 },
-                zoom: 8,
-            });
-        });
-    }
+export default {
+  components: { GoogleMap },
+  data(){
+      return {
+          center: {lat: 44, lng: 24},
+          zoom: 4
+      }
+  }
+   
 }
 </script>
 
 <style>
-    #map {
-        height: 800px;
-    }
+   
 </style>
