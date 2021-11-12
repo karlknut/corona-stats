@@ -1,49 +1,45 @@
 <template>
-   <canvas id="myChart"></canvas>
+<div>
+    <v-btn @click="addData">Do things</v-btn>
+   <chart :data="data" :labels="labels" :dataLabel="dataLabel"></chart>
+</div>
 </template>
 
 <script>
-import Chart from 'chart.js/auto';
+import Chart from '~/components/Chart.vue';
 export default {
+    components: { Chart },
     created(){
         this.$store.dispatch('getCountry', this.$route.params.slug);
     },
-    mounted(){
-        const labels = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-        ];
+    data(){
+        return {
+            labels: [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+            ],
+            dataLabel: 'My Data',
+            data: [0, 10, 5, 2, 20, 30, 45]
+        }
+    },
+    methods: {
+        addData(){
+            
+            //this.data[0]++; // not reactive
+            //this.data.splice(0,1,this.data[0]+1); // acts weirdly with chartjs
+            //this.$set(this.data, 0, this.data[0]+1);
 
-        const data = {
-            labels: labels,
-            datasets: [{
-                label: 'My First dataset',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: [0, 10, 5, 2, 20, 30, 45],
-            },
-            {
-                label: 'My Second dataset',
-                backgroundColor: 'rgb(0, 233, 132)',
-                borderColor: 'rgb(0, 233, 132)',
-                data: [0, 10, 5, 2, 20, 30, 45].reverse(),
-            }]
-        };
-
-        const config = {
-            type: 'line',
-            data: data,
-            options: {}
-        };
-
-        const myChart = new Chart(
-            document.getElementById('myChart'),
-            config
-        ); 
+            let newData = [...this.data];
+            newData[0]++;
+            this.data = newData;
+            
+     
+        }
     }
 }
 </script>
