@@ -6,8 +6,16 @@
             filled
             label="Search"
           ></v-text-field>
+           <v-select
+          :items="$store.state.sortingCategories"
+          item-text="name"
+          filled
+          label="Sort"
+          v-model="sort"
+          return-object
+        ></v-select>
     <v-row>
-      <v-col :cols="3" v-for="country in $store.getters.filteredCountries" :key="'result-' + country.ID">
+      <v-col :cols="3" v-for="country in $store.getters.sortedCountries" :key="'result-' + country.ID">
         <v-card elevation="2">
           <v-card-title>{{country.Country}}</v-card-title>
           <v-card-text>
@@ -16,8 +24,8 @@
               <li><b>Total Confirmed:</b>{{country.TotalConfirmed}}</li>
               <li><b>New Deaths:</b>{{country.NewDeaths}}</li>
               <li><b>Total Deaths:</b>{{country.TotalDeaths}}</li>
-              <li><b>New Recovered:</b>{{country.NewRecovered}}</li>
-              <li><b>Total Recovered:</b>{{country.TotalRecovered}}</li>          
+              <!-- <li><b>New Recovered:</b>{{country.NewRecovered}}</li>
+              <li><b>Total Recovered:</b>{{country.TotalRecovered}}</li>           -->
             </ul>
           </v-card-text>
         </v-card>
@@ -41,6 +49,14 @@ export default {
       },
       set(value){
         this.$store.commit('SET_SEARCH', value);
+      }
+    },
+    sort: {
+      get(){
+        return this.$store.state.sort;
+      },
+      set(value){
+        this.$store.commit('SET_SORT', value);
       }
     }
   }
