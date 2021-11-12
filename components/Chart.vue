@@ -47,6 +47,10 @@ export default {
             this.chart.data.datasets[0].data = newData;
             this.chart.update();
             console.log(this.chart);
+        },
+        labels(newLabels){
+            this.chart.data.labels = newLabels;
+            this.chart.update();
         }
     }
 }

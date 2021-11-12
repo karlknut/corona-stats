@@ -62,5 +62,14 @@ export const getters = {
             }
             return 0;
         });
-    }
+    },
+    labels(state){
+        return state.country.map(data => new Date(data.Date).toLocaleDateString());
+    },
+    confirmed(state){
+        return state.country.map(data => data.Confirmed);
+    },
+    deaths(state){
+        return state.country.map(data => data.Deaths);
+    },
 }
