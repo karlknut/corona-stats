@@ -6,8 +6,9 @@
 import { Loader } from "@googlemaps/js-api-loader"
 export default {
     mounted(){
+      
         const loader = new Loader({
-            apiKey: "",
+            apiKey: this.$config.googleApiKey,
             version: "weekly"
         });
 
