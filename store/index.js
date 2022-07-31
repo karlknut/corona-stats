@@ -1,3 +1,6 @@
+/// https://api.covid19api.com/live/country/:country/status/:status/date/:date
+
+
 export const state = () => ({
     countries: [],
     country:[],

@@ -2,23 +2,19 @@
   <div>
     <v-row>
       <v-col cols="9">
-        <v-text-field
-                v-model="search"
-                dense
-                filled
-                label="Search"
-              ></v-text-field>
+        <v-text-field v-model="search"
+                      dense
+                      filled
+                      label="Search"></v-text-field>
       </v-col>
       <v-col cols="3">
-        <v-select
-          :items="$store.state.sortingCategories"
-          item-text="name"
-          filled
-          label="Sort"
-          v-model="sort"
-          return-object
-        ></v-select>
-      </v-col>  
+        <v-select :items="$store.state.sortingCategories"
+                  item-text="name"
+                  filled
+                  label="Sort"
+                  v-model="sort"
+                  return-object></v-select>
+      </v-col>
     </v-row>
     <v-row>
       <v-col :cols="3" v-for="country in $store.getters.sortedCountries" :key="'result-' + country.ID">
@@ -41,34 +37,33 @@
 </template>
 
 <script>
-export default {
-  created(){
-    this.$store.dispatch('getSummary');
-  },
-  methods: {
-    
-  },
-  computed: {
-    search: {
-      get(){
-        return this.$store.state.search;
-      },
-      set(value){
-        this.$store.commit('SET_SEARCH', value);
-      }
+  export default {
+    created() {
+      this.$store.dispatch('getSummary');
     },
-    sort: {
-      get(){
-        return this.$store.state.sort;
+    methods: {
+
+    },
+    computed: {
+      search: {
+        get() {
+          return this.$store.state.search;
+        },
+        set(value) {
+          this.$store.commit('SET_SEARCH', value);
+        }
       },
-      set(value){
-        this.$store.commit('SET_SORT', value);
+      sort: {
+        get() {
+          return this.$store.state.sort;
+        },
+        set(value) {
+          this.$store.commit('SET_SORT', value);
+        }
       }
     }
   }
-}
 </script>
 
 <style>
-
 </style>
